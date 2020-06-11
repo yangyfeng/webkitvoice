@@ -338,19 +338,6 @@
     showInfo('');
   }
 
-  function emailButton() {
-    if (recognizing) {
-      create_email = true;
-      recognizing = false;
-      recognition.stop();
-    } else {
-      createEmail();
-    }
-    email_button.style.display = 'none';
-    email_info.style.display = 'inline-block';
-    showInfo('');
-  }
-
   function startButton(event) {
     if (recognizing) {
       recognition.stop();
@@ -388,7 +375,6 @@
     }
     current_style = style;
     copy_button.style.display = style;
-    email_button.style.display = style;
     copy_info.style.display = 'none';
     email_info.style.display = 'none';
   }
