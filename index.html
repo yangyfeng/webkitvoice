@@ -2,27 +2,16 @@
 <html class="no-js consumer" lang="en">
 
 <head>
-
-  <script nonce="tt0l5x3HCD9AobJlad1oQg">
-
-  </script>
   <meta charset="utf-8">
   <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
-  <meta
-    content="Google Chrome is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier."
-    name="description">
-  <title>
-    Chrome Browser
-  </title>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=latin" rel="stylesheet"
-    nonce="tt0l5x3HCD9AobJlad1oQg">
-  <link href="https://www.google.com/intl/en/chrome/assets/common/css/chrome.min.css" rel="stylesheet"
-    nonce="tt0l5x3HCD9AobJlad1oQg">
+  <title>语音输入</title>
+  <link rel="stylesheet" href="./css/family.css">
+  <link rel="stylesheet" href="./css/chrome.min.css">
   <link rel="stylesheet" href="./css/style.css">
 
 </head>
 
-<body class="" id="grid">
+<body id="grid">
   <div class="browser-landing" id="main">
     <div class="compact marquee">
       <div id="info">
@@ -37,80 +26,26 @@
       </div>
       <div id="div_start">
         <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img"
-            src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif"></button>
+            src="./img/mic.gif"></button>
       </div>
       <div id="results">
         <span class="final" id="final_span"></span> <span class="interim" id="interim_span"></span>
       </div>
       <div id="copy">
-        <button class="button" id="copy_button" onclick="copyButton()">Copy and Paste</button>
-        <div id="copy_info">
-          <p>
-            Press Control-C to copy text.
-          </p>
-          <p>
-            (Command-C on Mac.)
-          </p>
-        </div><button class="button" id="email_button" onclick="emailButton()">Create
-          Email</button>
-        <div id="email_info">
-          <p>
-            Text sent to default email application.
-          </p>
-          <p>
-            (See chrome://settings/handlers to change.)
-          </p>
-        </div>
-      </div>
-      <div class="compact marquee" id="div_language">
-        <select id="select_language" onchange="updateCountry()">
-        </select>&nbsp;&nbsp; <select id="select_dialect">
-        </select>
-      </div>
+        <button class="button" id="copy_button" onclick="copyButton()">复制/粘贴</button>
+      </div><button class="button" id="email_button" onclick="emailButton()">邮件</button>
+      <div id="email_info"></div>
     </div>
+    <div class="compact marquee" id="div_language">
+      <select id="select_language" onchange="updateCountry()">
+      </select>&nbsp;&nbsp; <select id="select_dialect">
+      </select>
+    </div>
+  </div>
   </div>
 </body>
 <script src="./js/index.js"></script>
-<script src="https://www.google.com/js/gweb/analytics/autotrack.js" nonce="tt0l5x3HCD9AobJlad1oQg">
-</script>
-<script src="https://www.google.com/intl/en/chrome/assets/common/js/chrome.min.js" nonce="tt0l5x3HCD9AobJlad1oQg">
-</script>
-<!-- <script nonce="tt0l5x3HCD9AobJlad1oQg">
-    var chrmMenuBar = new chrm.ui.MenuBar();
-    chrmMenuBar.decorate('nav');
-    var chrmLogo = new chrm.ui.Logo('logo');
-
-    var chrmscroll = new chrm.ui.SmoothScroll('scroll');
-    chrmscroll.init();
-
-
-
-    window.___gcfg = { lang: 'en' };
-    (function () {
-      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-      // po.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-    })();
-
-
-
-
-    var doubleTracker = new gweb.analytics.DoubleTrack('floodlight', {
-      src: 2542116,
-      type: 'clien612',
-      cat: 'chrom0'
-    });
-    doubleTracker.track();
-
-    doubleTracker.trackClass('doubletrack', true);
-  </script> -->
-<script nonce="tt0l5x3HCD9AobJlad1oQg">
-  // 全局数据
-  
-  // 设置默认语言
-  function setDefaultLanguage () {
-
-  }
+<script>
   // 如果您修改此数组，请同时更新下面的默认语言/方言。
   var langs =
     [['Afrikaans', ['af-ZA']],
@@ -214,15 +149,20 @@
     ['日本語', ['ja-JP']],
     ['हिन्दी', ['hi-IN']],
     ['ภาษาไทย', ['th-TH']]];
-
-  for (var i = 0; i < langs.length; i++) {
-    select_language.options[i] = new Option(langs[i][0], i);
+  var select_language = null
+  var select_dialect = null
+  window.onload = function () {
+    select_language = document.getElementById('select_language')
+    select_dialect = document.getElementById('select_dialect')
+    for (var i = 0; i < langs.length; i++) {
+      select_language.options[i] = new Option(langs[i][0], i);
+    }
+    // 设置默认语言/方言。
+    select_language.selectedIndex = 56;
+    updateCountry();
+    select_dialect.selectedIndex = 0;
+    showInfo('info_start');
   }
-  // 设置默认语言/方言。
-  select_language.selectedIndex = 56;
-  updateCountry();
-  select_dialect.selectedIndex = 0;
-  showInfo('info_start');
   // 设置语言/方言。
   function updateCountry() {
     for (var i = select_dialect.options.length - 1; i >= 0; i--) {
@@ -233,8 +173,6 @@
       select_dialect.options.add(new Option(list[i][1], list[i][0]));
     }
     select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
-    console.log('可选语言', select_language)
-    console.log('可选方言', select_dialect)
   }
 
   var create_email = false;
@@ -251,17 +189,17 @@
     recognition.onstart = function () {
       recognizing = true;
       showInfo('info_speak_now');
-      start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
+      start_img.src = './img/mic-animate.gif';
     };
 
     recognition.onerror = function (event) {
       if (event.error == 'no-speech') {
-        start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+        start_img.src = './img/mic.gif';
         showInfo('info_no_speech');
         ignore_onend = true;
       }
       if (event.error == 'audio-capture') {
-        start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+        start_img.src = './img/mic.gif';
         showInfo('info_no_microphone');
         ignore_onend = true;
       }
@@ -280,7 +218,7 @@
       if (ignore_onend) {
         return;
       }
-      start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+      start_img.src = './img/mic.gif';
       if (!final_transcript) {
         showInfo('info_start');
         return;
@@ -382,7 +320,7 @@
     ignore_onend = false;
     final_span.innerHTML = '';
     interim_span.innerHTML = '';
-    start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-slash.gif';
+    start_img.src = './img/mic-slash.gif';
     showInfo('info_allow');
     showButtons('none');
     start_timestamp = event.timeStamp;
