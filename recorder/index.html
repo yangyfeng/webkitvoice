@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+	<div id="mask">
+		<img src="image/luyin.gif" alt="">
+		<p>录音中······</p>
+	</div>
+	<button id="start" class="ui-btn ui-btn-primary">按住 说话</button>
+	<!-- <button id="stop" class="ui-btn ui-btn-primary" disabled>停止</button> -->
+	<div id="audio-container"></div>
+	<script src="js/recorder.js"></script>
+	<script>
+		// window.onload = function(){
+		var start = document.querySelector('#start');
+		// var stop = document.querySelector('#stop');
+		var container = document.querySelector('#audio-container');
+		var recorder = new Recorder({
+			sampleRate: 44100, //采样频率，默认为44100Hz(标准MP3采样率)
+			bitRate: 128, //比特率，默认为128kbps(标准MP3质量)
+			success: function () { //成功回调函数
+				// start.disabled = false;
+			},
+			error: function (msg) { //失败回调函数
+				alert(msg);
+			},
+			fix: function (msg) { //不支持H5录音回调函数
+				alert(msg);
+			}
+		});
+		var mask = document.getElementById('mask');
+		var start = document.querySelector('#start');
+		// 开始取样了，延迟暂停音频播放
+		start.addEventListener('touchstart', function () {
+			timer = setTimeout(function () {
+				console.log(1)
+				var audio = document.querySelectorAll('audio');
+				for (var i = 0; i < audio.length; i++) {
+					if (!audio[i].paused) {
+						audio[i].pause();
+					}
+				}
+				start.innerHTML = "松开  结束"
+				mask.style.display = "block"
+				recorder.start();
+			}, 500);
+		});
+		// 移动了就去取消延迟，继续播放音频
+		start.addEventListener('touchmove', function () {
+			timeOutEvent = setTimeout(function () {
+				clearTimeout(timer);
+				timer = 0;
+			});
+		})
+		// 触摸结束了，获取音频buffer文件流
+		start.addEventListener("touchend", function (e) {
+			console.log('touchend');
+			recorder.stop();
+			mask.style.display = "none"
+			recorder.getBlob(function (blob) {
+				var audio = document.createElement('audio');
+				audio.src = URL.createObjectURL(blob);
+				console.log('buffer二进制文件流', blob)
+				audio.controls = true;
+				container.appendChild(audio);
+			});
+			start.innerHTML = "按住  说话"
+			clearTimeout(timer);
+			return false;
+		});
+	</script>
+</body>
+
+</html>
